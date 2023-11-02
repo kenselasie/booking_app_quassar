@@ -4,7 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "concurrently \"cd frontend && yarn run dev\" \"cd backend && bun run dev\"",
-    "build": "concurrently \"cd frontend && yarn run build\" \"cd backend && bun run start\""
+    "build": "concurrently \"cd frontend && yarn run build\" \"cd backend && bun run start\"",
+    "install-f-packages": "concurrently \"cd frontend && yarn install\"",
+    "install-b-packages": "concurrently \"cd backend && bun install\""
   },
   "devDependencies": {
     "bun-types": "latest",

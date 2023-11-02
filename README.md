@@ -10,8 +10,20 @@ install dependencies:
 
 ```bash
 bun install
+bun run install-f-packages
+bun run install-b-packages
 ```
+OR
 
+Navigate to frontend folder `cd frontend` and run
+```bash
+yarn install
+```
+and
+Navigate to backend folder `cd backend` and run
+```bash
+bun install
+```
 To run in dev mode:
 
 ```bash
