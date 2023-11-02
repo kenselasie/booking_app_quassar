@@ -1,0 +1,16 @@
+{
+  "name": "booking_app",
+  "module": "index.ts",
+  "type": "module",
+  "scripts": {
+    "dev": "concurrently \"cd frontend && yarn run dev\" \"cd backend && bun run dev\"",
+    "build": "concurrently \"cd frontend && yarn run build\" \"cd backend && bun run start\""
+  },
+  "devDependencies": {
+    "bun-types": "latest",
+    "concurrently": "^8.2.2"
+  },
+  "peerDependencies": {
+    "typescript": "^5.0.0"
+  }
+}
