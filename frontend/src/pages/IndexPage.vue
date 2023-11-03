@@ -15,68 +15,46 @@
 </template>
 
 <script lang="ts" setup>
-import { ICalenderData } from './models';
+import { IAPIError, ICalenderData, WindowObject } from '../interfaces/models';
 import {
   addAppointment,
   updateAppointment,
   deleteAppointment,
 } from '../services/appointmentAPI';
-import { Notify } from 'quasar';
+import {errorNotify, successNotify} from '../lib/notify';
 import { onMounted } from 'vue';
 
-const scheduler = (window as any).scheduler;
+const scheduler = (window as unknown as WindowObject).scheduler;
+const baseURL = import.meta.env.VITE_API_URL
 
 const createEvent = async (data: ICalenderData) => {
   try {
-    const result = await addAppointment(data);
-    Notify.create({
-      message: 'Event successfully created',
-      position: 'top-right',
-      color: 'green',
-    });
-    console.log(result);
-  } catch (err: any) {
-    console.error(err);
-    Notify.create({
-      message: err?.data?.error || 'Error creating event',
-      position: 'top-right',
-      color: 'red',
-    });
+    const results = await addAppointment(data);
+    successNotify('Event successfully created');
+    return results
+  } catch (err) {
+    const error = err as IAPIError;
+    errorNotify(error?.data?.error || 'Error creating event');
   }
 };
 
 const updateEvent = async (data: ICalenderData, id: ICalenderData['id']) => {
   try {
     await updateAppointment(id, data);
-    Notify.create({
-      message: 'Event successfully updated',
-      position: 'top-right',
-      color: 'green',
-    });
-  } catch (err: any) {
-    Notify.create({
-      message: err?.data?.error || 'Error updating event',
-      position: 'top-right',
-      color: 'red',
-    });
+    successNotify('Event successfully updated');
+  } catch (err) {
+    const error = err as IAPIError;
+    errorNotify(error?.data?.error || 'Error updating event');
   }
 };
 
 const deleteEvent = async (id: ICalenderData['id']) => {
   try {
     await deleteAppointment(id);
-    Notify.create({
-      message: 'Event successfully deleted',
-      position: 'top-right',
-      color: 'green',
-    });
-  } catch (err: any) {
-    console.error(err);
-    Notify.create({
-      message: err?.data?.error || 'Error deleting event',
-      position: 'top-right',
-      color: 'red',
-    });
+    successNotify('Event successfully deleted');
+  } catch (err) {
+    const error = err as IAPIError;
+    errorNotify(error?.data?.error || 'Error deleting event');
   }
 };
 
@@ -112,19 +90,23 @@ const initScheduler = () => {
   ];
 
   scheduler.init('scheduler_here', new Date(2023, 2, 1), 'month');
-  scheduler.load(`${import.meta.env.VITE_API_URL}/appointment`);
+  scheduler.load(`${baseURL}/appointment`);
   if (!scheduler.$_initOnce) {
     scheduler.$_initOnce = true;
     scheduler.createDataProcessor({
       event: {
-        create: (data: ICalenderData) => {
-          return createEvent(data);
+        create: async (data: ICalenderData) => {
+          await createEvent(data);
+          scheduler.load(`${baseURL}/appointment`);
+          scheduler.deleteEvent(data.id);
         },
-        update: (data: ICalenderData, id: ICalenderData['id']) => {
-          updateEvent(data, id);
+        update: async (data: ICalenderData, id: ICalenderData['id']) => {
+          await updateEvent(data, id);
+          scheduler.load(`${baseURL}/appointment`);
         },
-        delete: (id: ICalenderData['id']) => {
-          deleteEvent(id);
+        delete: async (id: ICalenderData['id']) => {
+          await deleteEvent(id);
+          scheduler.load(`${baseURL}/appointment`);
         },
       },
     });

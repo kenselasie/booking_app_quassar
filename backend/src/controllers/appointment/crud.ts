@@ -39,7 +39,6 @@ const remove: RequestHandler = async (req: Request, res) => {
 
 const getOne: RequestHandler = async (req: Request, res) => {
   const { id } = req.params;
-  console.log(id);
   const appointment = await Appointment.findById(id);
   if (!appointment) {
     return res.status(404).json({

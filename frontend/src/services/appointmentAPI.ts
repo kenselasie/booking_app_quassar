@@ -1,4 +1,4 @@
-import { ICalenderData } from 'src/pages/models';
+import { ICalenderData } from 'src/interfaces/models';
 import http from './base';
 import { AxiosError } from 'axios';
 
