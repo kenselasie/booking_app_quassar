@@ -2,6 +2,16 @@ import { ICalenderData } from 'src/pages/models';
 import http from './base';
 import { AxiosError } from 'axios';
 
+export const getAllAppointment = async () => {
+  const path = '/appointment';
+
+  try {
+    const { data } = await http.get(path);
+    return await Promise.resolve(data);
+  } catch (err) {
+    return await Promise.reject(err as AxiosError);
+  }
+};
 export const addAppointment = async (payload: ICalenderData) => {
   const path = '/appointment';
 

@@ -1,4 +1,5 @@
 {
+  "extends": "./frontend/tsconfig.json",
   "compilerOptions": {
     "lib": ["ESNext"],
     "module": "esnext",
