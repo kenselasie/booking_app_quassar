@@ -24,7 +24,7 @@ Navigate to backend folder `cd backend` and run
 ```bash
 bun install
 ```
-To run in dev mode:
+To run frontend and backend concurrently in dev mode, run this command on the root directory:
 
 ```bash
 bun run dev
@@ -34,12 +34,6 @@ You will be able to access frontend on `http://localhost:9000`
 and backend APIs are hosted on `http://localhost:8888`
 
 
-To run in build mode:
-
-```bash
-bun run build
-```
-The production ready application will run on `http://localhost:8888`
 
 Alternatively, you can use Docker and Docker compose by running.
 
@@ -47,5 +41,12 @@ Alternatively, you can use Docker and Docker compose by running.
 docker-compose up
 ```
 App will run on port 8888
+
+The frontend can be built and deployed on vercel, amplify etc. using
+```bash
+cd frontennd
+yarn run build
+```
+
 
 This project was created using `bun init` in bun v1.0.1. [Bun](https://bun.sh) is a fast all-in-one JavaScript runtime.

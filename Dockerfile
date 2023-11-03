@@ -1,20 +1,14 @@
-FROM node:18 AS builder
-WORKDIR /app
-COPY ./frontend ./frontend
-WORKDIR /app/frontend
-RUN yarn install
-
 FROM oven/bun:1
 WORKDIR /app
-COPY --from=builder /app/frontend ./frontend
 COPY ./backend ./backend
 COPY package.json bun.lockb ./
 RUN bun install
+RUN bun run install-b-packages
 
 # WORKDIR /app/backend
 # RUN bun install
 
 ARG PORT
 EXPOSE ${PORT:-8888}
-CMD [ "bun", "run", "build" ]
+CMD [ "bun", "run", "start" ]
 
